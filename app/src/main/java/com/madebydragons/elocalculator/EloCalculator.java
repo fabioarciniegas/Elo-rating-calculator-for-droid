@@ -23,12 +23,12 @@ public class EloCalculator {
     }
 
     // final elo of a given matches such that in elos[i] the outcome, in points was outcomes[i]
-    public static double tournament(int a, Integer elos[],Double outcomes[]) throws InvalidTournamentData{
+    public static double tournament(int initial, Integer elos[],Double outcomes[]) throws InvalidTournamentData{
         if(elos.length != outcomes.length)
             throw new InvalidTournamentData("inconsistent elo/outcomes lengths.");
         double p = 0.0;
-        for(int i=0;i<elos.length;i++) p += points(a, elos[i].intValue(), outcomes[i].doubleValue());
-        return Math.round(  p + (double) a );
+        for(int i=0;i<elos.length;i++) p += points(initial, elos[i].intValue(), outcomes[i].doubleValue());
+        return Math.round(  p + (double) initial );
     }
 
 

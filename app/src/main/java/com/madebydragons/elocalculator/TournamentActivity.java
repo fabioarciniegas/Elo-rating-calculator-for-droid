@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 public class TournamentActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = "TournamentActivity";
 
     private int insertionRow = 0;
     @Override
@@ -51,40 +55,109 @@ public class TournamentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tournament);
-        EditText yourtext = (EditText)findViewById(R.id.first_match);
-        yourtext.addTextChangedListener(new RowAwareTextEditWatcher((TableRow)findViewById(R.id.first_row)) {
+        EditText first_match = (EditText)findViewById(R.id.first_match);
+        first_match.addTextChangedListener(new TextWatcher() {
             @Override
-            public void afterTextChanged(Editable s) {
-
-                Vector<Integer> elos = new Vector<Integer>();
-                //TODO: stop being lazy and change to an enum.
-                ArrayList<Double> results = new ArrayList<Double>();
-                TableLayout tl = (TableLayout) findViewById(R.id.tournament_table);
-                for(int i=3;i < tl.getChildCount()-1;i++){
-                    assert(tl.getChildAt(i) instanceof TableRow );
-                    TableRow tr = (TableRow) tl.getChildAt(i);
-                    assert(tr.getChildAt(0) instanceof EditText);
-                    elos.add(new Integer(((EditText)tr.getChildAt(0)).getText().toString()).intValue());
-                    results.add(new Double(((EditText) tr.getChildAt(0)).getText().toString()).doubleValue()/2);
-                }
-                int finalScore = 0;
-                try {
-                    EloCalculator.tournament(
-                            new Integer(((EditText) findViewById(R.id.your_rating)).getText().toString()).intValue(), elos.toArray(new Integer[elos.size()]), results.toArray(new Double[elos.size()]));
-                } catch (InvalidTournamentData invalidTournamentData) {
-                    invalidTournamentData.printStackTrace();
-                }
-
-                ((EditText) findViewById(R.id.your_rating)).setText(new Integer(finalScore).toString());
-            }
+            public void afterTextChanged(Editable s) { recalculateFinalElo(); }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}});
+
+        EditText initial_score = (EditText)findViewById(R.id.your_rating);
+        initial_score.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                recalculateFinalElo();
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        });
+        SeekBar sb = (SeekBar)findViewById(R.id.first_result);
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                recalculateFinalElo();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+
         });
         TableLayout tl = (TableLayout) findViewById(R.id.tournament_table);
         // The last row (child of table) is the add button, therefore when a row is added is immediately before it
         insertionRow = tl.getChildCount()-1;
+    }
+
+    public void recalculateFinalElo(){
+        Vector<Integer> elos = new Vector<Integer>();
+        ArrayList<Double> results = new ArrayList<Double>();
+        TableLayout tl = (TableLayout) findViewById(R.id.tournament_table);
+        // starting with FIRST_MATCH_COlUMN, the first cell of every row in the table is
+        // an elo score for a contender. Loop through, accumulating elos as ints in vector
+        // similarly, the third cell of every row in the table is
+        // an slider with the result of the match. Loop through, accumulating results as as doubles in vector
+        for(int i=3;i < tl.getChildCount()-1;i++){
+            assert tl.getChildAt(i) instanceof TableRow;
+            TableRow tr = (TableRow) tl.getChildAt(i);
+            assert tr.getChildAt(0) instanceof EditText;
+            elos.add(EditTextToIntValue((EditText) tr.getChildAt(0)));
+            assert tr.getChildAt(2) instanceof SeekBar;
+            results.add(SeekBarToDoubleValue((SeekBar)tr.getChildAt(2)));
+        }
+        int finalRating = 0;
+        try {
+            int initialRating = EditTextToIntValue((EditText) findViewById(R.id.your_rating));
+            finalRating = (int) EloCalculator.tournament(
+                    initialRating, elos.toArray(new Integer[elos.size()]), results.toArray(new Double[results.size()]));
+            // If nothing has been really populated yet, keep final rating same as initial
+            if(elos.size()==1 && EditTextToIntValue((EditText) findViewById(R.id.first_match))==0)
+                finalRating=initialRating;
+
+        } catch (InvalidTournamentData invalidTournamentData) {
+            invalidTournamentData.printStackTrace();
+        }
+        ((EditText) findViewById(R.id.your_rating_after)).setText(new Integer(finalRating).toString());
+    }
+
+    /* Convert value inside an edit text to integer. Empty or invalid formatting is returned as
+     the int 0 instead of an exception */
+    private static int EditTextToIntValue(EditText a){
+        int value = 0;
+        String s = a.getText().toString();
+        if(s.isEmpty())
+            return value;
+        try {
+            value = Integer.parseInt(s);
+        }
+        catch(NumberFormatException e) {
+            Log.d(LOG_TAG, e.getMessage());
+        }
+        return value;
+    }
+
+    /* Convert value on a seekbar on range [0,2] to a double of value 0, 0.5, or 1, corresponding
+     to the outcome of the match (0 loose, .5 draw)  . Empty or invalid formatting is return as 0.0
+     instead of an exception. */
+    private static double SeekBarToDoubleValue(SeekBar s){
+        if(s == null)
+            return 0.0;
+        if(s.getProgress()==1)
+            return 0.5;
+        else if(s.getProgress()==2)
+            return 1.0;
+        return 0.0;
     }
 
     public int findRowIndex(TableLayout tl, TableRow tr){
@@ -126,6 +199,14 @@ public class TournamentActivity extends AppCompatActivity {
     public void populateWithNewContents(TableRow tr){
         EditText opponent_score = new EditText(this);
         opponent_score.setEnabled(true);
+        opponent_score.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) { recalculateFinalElo();}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
         opponent_score.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         tr.addView(opponent_score);
 
@@ -141,6 +222,17 @@ public class TournamentActivity extends AppCompatActivity {
         sb.setIndeterminate(false);
         sb.setMax(2);
         sb.setBottom(0);
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+               recalculateFinalElo();
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+
+        });
         //android:layout_height="wrap_content"
             //TODO?  android:layout_gravity="bottom"
       //  android:layout_marginLeft="0dp"
