@@ -88,54 +88,6 @@
                 android:text="" android:id="@+id/empty10" android:textAlignment="center" />
         </TableRow>
 
-        <TableRow
-            android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:id="@+id/first_row">
-
-            <EditText android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number"
-                    android:ems="4" android:id="@+id/first_match" android:maxLength="4"
-                    android:enabled="true"
-                android:layout_gravity="bottom" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/loose_image"
-                android:src="@drawable/ic_loose_48dp"
-                android:contentDescription="@string/loose_hint"
-                android:layout_gravity="bottom|right" />
-
-            <SeekBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/first_result"
-                android:max="2"
-                android:progress="1"
-                android:minWidth="80dp"
-                android:layout_gravity="bottom"
-                android:indeterminate="false"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="0dp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/win_image"
-                android:src="@drawable/ic_win_48dp"
-                android:contentDescription="@string/win_hint"
-                android:layout_gravity="bottom" />
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageButton"
-                android:clickable="false"
-                android:contentDescription="@string/delete_match"
-                android:background="@android:color/transparent"
-                android:src="@android:drawable/ic_input_delete"
-                android:layout_gravity="bottom"
-                android:onClick="deleteRow" />
-        </TableRow>
         <TableRow android:id="@+id/add_button_row">
             <ImageButton android:contentDescription="@string/add_match" android:src="@android:drawable/ic_input_add"
                 android:background="@android:color/transparent"

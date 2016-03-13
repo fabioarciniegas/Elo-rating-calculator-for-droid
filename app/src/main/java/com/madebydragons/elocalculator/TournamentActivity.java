@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TableLayout;
@@ -55,15 +56,7 @@ public class TournamentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tournament);
-        EditText first_match = (EditText)findViewById(R.id.first_match);
-        first_match.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) { recalculateFinalElo(); }
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}});
-
+        TableLayout tl = (TableLayout) findViewById(R.id.tournament_table);
         EditText initial_score = (EditText)findViewById(R.id.your_rating);
         initial_score.addTextChangedListener(new TextWatcher() {
             @Override
@@ -79,25 +72,9 @@ public class TournamentActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
         });
-        SeekBar sb = (SeekBar)findViewById(R.id.first_result);
-        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                recalculateFinalElo();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-
-        });
-        TableLayout tl = (TableLayout) findViewById(R.id.tournament_table);
         // The last row (child of table) is the add button, therefore when a row is added is immediately before it
         insertionRow = tl.getChildCount()-1;
+        insertRow(null);
     }
 
     public void recalculateFinalElo(){
@@ -122,13 +99,14 @@ public class TournamentActivity extends AppCompatActivity {
             finalRating = (int) EloCalculator.tournament(
                     initialRating, elos.toArray(new Integer[elos.size()]), results.toArray(new Double[results.size()]));
             // If nothing has been really populated yet, keep final rating same as initial
-            if(elos.size()==1 && EditTextToIntValue((EditText) findViewById(R.id.first_match))==0)
+            if(elos.size()==1 && elos.get(0).intValue()==0)
                 finalRating=initialRating;
 
         } catch (InvalidTournamentData invalidTournamentData) {
             invalidTournamentData.printStackTrace();
         }
-        ((EditText) findViewById(R.id.your_rating_after)).setText(new Integer(finalRating).toString());
+        if(EditTextToIntValue((EditText)findViewById(R.id.your_rating))>0)
+            ((EditText) findViewById(R.id.your_rating_after)).setText(new Integer(finalRating).toString());
     }
 
     /* Convert value inside an edit text to integer. Empty or invalid formatting is returned as
@@ -201,13 +179,20 @@ public class TournamentActivity extends AppCompatActivity {
         opponent_score.setEnabled(true);
         opponent_score.addTextChangedListener(new TextWatcher() {
             @Override
-            public void afterTextChanged(Editable s) { recalculateFinalElo();}
+            public void afterTextChanged(Editable s) {
+                recalculateFinalElo();
+            }
+
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
         });
         opponent_score.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+        opponent_score.setInputType(EditorInfo.TYPE_CLASS_NUMBER);
         tr.addView(opponent_score);
 
         ImageView loose = new ImageView(this);
@@ -250,6 +235,6 @@ public class TournamentActivity extends AppCompatActivity {
         b.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         b.setBackgroundColor(android.R.color.transparent);
         tr.addView(b);
-
+        opponent_score.requestFocus();
     }
 }
