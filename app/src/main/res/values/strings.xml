@@ -11,6 +11,36 @@
     <string name="title_activity_main">Elo Calculator (single)</string>
 
     <!-- Strings related to Settings -->
+    <string name="pref_title_K_value">K Value</string>
+    <string name="pref_description_K_value">the K value in the ELO equation determines how much a single match can affect the player\'s score.</string>
+
+    <string name="pref_use_custom_K_value">Type of K factor</string>
+    <string name="pref_description_use_custom_K_value"></string>
+    <string name="pref_switch_use_custom_K_value_off">Custom</string>
+    <string name="pref_switch_use_custom_K_value_on">Standard</string>
+
+
+
+    <string name="pref_standard_k_title">Standard K to use</string>
+    <string-array name="pref_standard_k_titles">
+        <item>Chess.com (K=16)</item>
+        <item>ICC (K=32)</item>
+        <item>Approx. FIDE (K=20 for elo less than 2400, 10 otherwise)</item>
+        <item>Approx. USCF (linear between 68 for elo 200 and 14.8 for 2700+) </item>
+    </string-array>
+    <string-array name="pref_standard_k_values">
+        <item>@string/k_factor_chess_com</item>
+        <item>@string/k_factor_icc</item>
+        <item>@string/k_factor_approx_fide</item>
+        <item>@string/k_factor_approx_uscf</item>
+    </string-array>
+
+    <string name="pref_custom_k_value">Custom K Value to use</string>
+
+    <string name="k_factor_chess_com">chess.com</string>
+    <string name="k_factor_icc">icc</string>
+    <string name="k_factor_approx_fide">approximate fide</string>
+    <string name="k_factor_approx_uscf">approximate uscf</string>
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
@@ -77,4 +107,9 @@
     <string name="match_result">Match result</string>
     <string name="add_match">add match</string>
     <string name="delete_match">delete match</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
 </resources>

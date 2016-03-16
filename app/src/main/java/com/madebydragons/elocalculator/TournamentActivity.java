@@ -1,6 +1,7 @@
 package com.madebydragons.elocalculator;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,6 +18,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -43,6 +45,7 @@ public class TournamentActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.tournament:
+                //TODO: start same activity if previously selected, not new one
                 intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 return true;
@@ -96,7 +99,12 @@ public class TournamentActivity extends AppCompatActivity {
         int finalRating = 0;
         try {
             int initialRating = EditTextToIntValue((EditText) findViewById(R.id.your_rating));
-            finalRating = (int) EloCalculator.tournament(
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            String KFactorPreference = prefs.getString("standard_k", getString(R.string.k_factor_chess_com));
+
+            KFactor k = new KFactorFactory(this).createKFactor(KFactorPreference);
+            EloCalculator elo = new EloCalculator(k);
+            finalRating = (int) elo.tournament(
                     initialRating, elos.toArray(new Integer[elos.size()]), results.toArray(new Double[results.size()]));
             // If nothing has been really populated yet, keep final rating same as initial
             if(elos.size()==1 && elos.get(0).intValue()==0)
@@ -104,6 +112,10 @@ public class TournamentActivity extends AppCompatActivity {
 
         } catch (InvalidTournamentData invalidTournamentData) {
             invalidTournamentData.printStackTrace();
+        }
+        catch (UnknownKFactorIdentifier unknownKFactorIdentifier) {
+            Log.d(LOG_TAG,"Something is seriously wrong. K factor IDs should be static and in string.xml");
+            unknownKFactorIdentifier.printStackTrace();
         }
         if(EditTextToIntValue((EditText)findViewById(R.id.your_rating))>0)
             ((EditText) findViewById(R.id.your_rating_after)).setText(new Integer(finalRating).toString());
