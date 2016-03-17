@@ -1,7 +1,10 @@
 package com.madebydragons.elocalculator;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.view.View;
@@ -13,9 +16,13 @@ import android.view.MenuInflater;
 import android.content.Intent;
 import android.view.MenuItem;
 
+
 public class MainActivity extends AppCompatActivity {
 
-    private static double K = 16.0;
+    // An arbitrary value set by Elo to make final numbers behave in a human-readable range
+    // see wikipedia article
+    private static double M_VALUE = 400.0;
+    private static String LOG_TAG= "MainActivity";
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -41,7 +48,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateWithNewRatings();
 
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,11 +141,20 @@ public class MainActivity extends AppCompatActivity {
         l.setEnabled(false);
     }
 
-    public static double points(double p1,double p2,double actual){
-        double expected_p1 = 1.0 / (1 + Math.pow(10.0, (p2-p1)/400.0));
-        //TODO: make K configurable from settings
-        //TODO: verify rounding
-        return Math.round(K*(actual - expected_p1));
+    public double points(double p1,double p2,double actual){
+        double expected_p1 = 1.0 / (1 + Math.pow(10.0, (p2-p1)/M_VALUE));
+        KFactor k = null;
+        try {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            String KFactorPreference = prefs.getString("standard_k", getString(R.string.k_factor_chess_com));
+            k = new KFactorFactory(this).createKFactor(KFactorPreference);
+        }
+        catch (UnknownKFactorIdentifier unknownKFactorIdentifier) {
+            Log.d(LOG_TAG, "Something is seriously wrong. K factor IDs should be static and in string.xml");
+            unknownKFactorIdentifier.printStackTrace();
+        }
+        assert k != null;
+        return Math.round(k.K((int)p1)*(actual - expected_p1));
     }
 
     // 1.0 for win, 0 loose, 0.5 draw

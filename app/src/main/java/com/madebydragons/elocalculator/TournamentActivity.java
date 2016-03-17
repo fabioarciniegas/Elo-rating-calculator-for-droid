@@ -79,6 +79,12 @@ public class TournamentActivity extends AppCompatActivity {
         insertionRow = tl.getChildCount()-1;
         insertRow(null);
     }
+    @Override
+    public void onResume(){
+        super.onResume();
+        recalculateFinalElo();
+
+    }
 
     public void recalculateFinalElo(){
         Vector<Integer> elos = new Vector<Integer>();
