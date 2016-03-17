@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.SwitchPreference;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -40,6 +41,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
+        // Display the fragment as the main content.
+        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new GeneralPreferenceFragment())
+                .commit();
+
     }
 
     /**
@@ -52,7 +58,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
-//TODO: fix initial state of preference pane
+
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         int id = item.getItemId();
@@ -90,7 +96,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void onBuildHeaders(List<Header> target) {
-        loadHeadersFromResource(R.xml.pref_headers, target);
+//        loadHeadersFromResource(R.xml.pref_headers, target);
     }
 
     /**
@@ -198,9 +204,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     boolean using_standard = ((Boolean) newValue).booleanValue();
                     findPreference("custom_k").setEnabled(!using_standard);
+                    findPreference("standard_k").setEnabled(using_standard);
                     return true;
                 }
             });
+
+            boolean using_standard = ((SwitchPreference)findPreference("use_standard_k")).isChecked();
+            findPreference("custom_k").setEnabled(!using_standard);
+            findPreference("standard_k").setEnabled(using_standard);
         }
 
         @Override
