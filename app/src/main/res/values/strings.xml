@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Elo Calculator</string>
+    <string name="app_name_single_match_mode">Elo Calculator (single match)</string>
+    <string name="app_name_tournament_mode">Elo Calculator (tournament)</string>
     <string name="your_rating">Your Elo</string>
     <string name="opponents_rating">Opponent\'s</string>
     <string name="versus">vs</string>
@@ -18,6 +20,8 @@
     <string name="pref_description_use_custom_K_value"></string>
     <string name="pref_switch_use_custom_K_value_off">Custom</string>
     <string name="pref_switch_use_custom_K_value_on">Standard</string>
+
+
 
 
 

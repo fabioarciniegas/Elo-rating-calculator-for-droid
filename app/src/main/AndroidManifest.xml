@@ -5,25 +5,28 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/app_name_single_match_mode"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <activity android:name=".MainActivity" >
+        <activity android:name=".MainActivity"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".TournamentActivity"
+            android:launchMode="singleInstance"
+           android:label="@string/app_name_tournament_mode">
+        </activity>
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".TournamentActivity" >
+            android:launchMode="singleInstance"
+            android:label="@string/title_activity_settings" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.madebydragons.elocalculator.TournamentActivity" />
-        </activity>
-        <activity android:name=".TournamentActivity" >
         </activity>
     </application>
 

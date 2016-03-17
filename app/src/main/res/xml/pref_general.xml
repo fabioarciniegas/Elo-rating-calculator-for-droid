@@ -10,7 +10,6 @@
         android:summary="@string/pref_description_use_custom_K_value"
         android:switchTextOff="@string/pref_switch_use_custom_K_value_off"
         android:switchTextOn="@string/pref_switch_use_custom_K_value_on"
-        android:disableDependentsState="true"
         android:defaultValue="true" />
 
     <ListPreference
@@ -21,7 +20,9 @@
         android:entryValues="@array/pref_standard_k_values"
         android:defaultValue="@string/k_factor_chess_com"
         android:negativeButtonText="@null"
-        android:positiveButtonText="@null" />
+        android:positiveButtonText="@null"
+        android:dependency="use_standard_k"
+        />
 
     <EditTextPreference
         android:key="custom_k"

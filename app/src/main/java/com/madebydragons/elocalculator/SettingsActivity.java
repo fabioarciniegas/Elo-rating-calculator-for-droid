@@ -4,6 +4,7 @@ package com.madebydragons.elocalculator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -51,14 +52,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
-
+//TODO: fix initial state of preference pane
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            if (!super.onMenuItemSelected(featureId, item)) {
-                NavUtils.navigateUpFromSameTask(this);
-            }
+            NavUtils.navigateUpFromSameTask(this);
+           // if (!super.onMenuItemSelected(featureId, item)) {
+        //        NavUtils.navigateUpFromSameTask(this);
+      //      }
             return true;
         }
         return super.onMenuItemSelected(featureId, item);
@@ -191,6 +193,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("standard_k"));
             bindPreferenceSummaryToValue(findPreference("custom_k"));
+            findPreference("use_standard_k").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean using_standard = ((Boolean) newValue).booleanValue();
+                    findPreference("custom_k").setEnabled(!using_standard);
+                    return true;
+                }
+            });
         }
 
         @Override
@@ -202,6 +212,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             }
             return super.onOptionsItemSelected(item);
         }
+
     }
 
 
