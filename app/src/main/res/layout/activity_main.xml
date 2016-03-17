@@ -9,24 +9,10 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true">
     <TableRow>
 
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/opponents_rating"
-            android:id="@+id/textView" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/versus"
-            android:id="@+id/textView"
-            android:textAlignment="center" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,18 +20,35 @@
             android:text="@string/your_rating"
             android:id="@+id/player_a"
             android:labelFor="@string/your_rating"/>
-        </TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/versus"
+            android:id="@+id/textView"
+            android:textAlignment="center"
+            android:layout_column="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/opponents_rating"
+            android:id="@+id/textView"
+            android:layout_column="2" />
+
+
+    </TableRow>
         <TableRow>
-
-
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="5"
-                android:id="@+id/opponents_rating"
+                android:id="@+id/your_rating"
                 android:maxLength="5" />
-
+            
 
             <TextView
                 android:layout_width="wrap_content"
@@ -59,8 +62,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="5"
-                android:id="@+id/your_rating"
-                android:textAlignment="textEnd"
+                android:id="@+id/opponents_rating"
                 android:maxLength="5" />
 
         </TableRow>
@@ -96,6 +98,22 @@
 
     </TableRow>
 
-</TableLayout>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableRow>
+
+    </TableLayout>
 
 </RelativeLayout>
