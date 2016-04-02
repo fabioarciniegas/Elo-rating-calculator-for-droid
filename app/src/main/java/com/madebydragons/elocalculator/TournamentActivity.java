@@ -50,6 +50,10 @@ public class TournamentActivity extends AppCompatActivity {
                 intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.help:
+                intent = new Intent(this, HelpActivity.class);
+                startActivity(intent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -218,7 +222,7 @@ public class TournamentActivity extends AppCompatActivity {
         tr.addView(opponent_score);
 
         ImageView loose = new ImageView(this);
-        loose.setImageResource(R.drawable.ic_loose_48dp);
+        loose.setImageResource(R.drawable.ic_loose);
         loose.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         tr.addView(loose);
 
@@ -248,7 +252,7 @@ public class TournamentActivity extends AppCompatActivity {
         tr.addView(sb);
 
         ImageView win = new ImageView(this);
-        win.setImageResource(R.drawable.ic_win_48dp);
+        win.setImageResource(R.drawable.ic_win);
         win.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         tr.addView(win);
 

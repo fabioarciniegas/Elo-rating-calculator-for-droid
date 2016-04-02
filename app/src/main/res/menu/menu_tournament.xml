@@ -9,4 +9,6 @@
             android:icon="@drawable/ic_settings"
             android:title="@string/title_activity_settings"
             app:showAsAction="always"/>
+    <item android:id="@+id/help"
+        android:title="Help"/>
     </menu>

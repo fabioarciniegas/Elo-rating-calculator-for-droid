@@ -8,25 +8,32 @@
         android:label="@string/app_name_single_match_mode"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <activity android:name=".MainActivity"
-            android:launchMode="singleInstance">
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleInstance" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TournamentActivity"
-            android:launchMode="singleInstance"
-           android:label="@string/app_name_tournament_mode">
+        <activity
+            android:name=".TournamentActivity"
+            android:label="@string/app_name_tournament_mode"
+            android:launchMode="singleInstance" >
         </activity>
         <activity
             android:name=".SettingsActivity"
-            android:launchMode="singleInstance"
-            android:label="@string/title_activity_settings" >
+            android:label="@string/title_activity_settings"
+            android:launchMode="singleInstance" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.madebydragons.elocalculator.TournamentActivity" />
+        </activity>
+        <activity
+            android:name=".HelpActivity"
+            android:label="@string/title_activity_help"
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
 

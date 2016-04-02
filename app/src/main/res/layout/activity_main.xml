@@ -75,7 +75,7 @@
         android:text="@string/individual_loose_value"
         android:id="@+id/loose_button"
         android:layout_marginTop="98dp"
-        android:drawableStart="@drawable/ic_loose_24dp"
+        android:drawableStart="@drawable/ic_loose"
         android:onClick="updateWithLoss"
         android:enabled="false" />
 
@@ -85,7 +85,6 @@
         android:text="@string/individual_draw_value"
         android:id="@+id/draw_button"
         android:enabled="true"
-        android:drawableStart="@drawable/ic_empty_24dp"
         android:onClick="updateWithDraw" />
 
     <Button
@@ -94,7 +93,7 @@
         android:text="@string/individual_win_value"
         android:id="@+id/win_button"
         android:onClick="updateWithWin"
-        android:drawableStart="@drawable/ic_win_24dp"/>
+        android:drawableStart="@drawable/ic_win"/>
 
     </TableRow>
 
