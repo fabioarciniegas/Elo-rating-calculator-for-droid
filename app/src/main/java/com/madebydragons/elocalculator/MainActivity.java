@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
-        Intent intent = null;
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.settings:
                 intent = new Intent(this, SettingsActivity.class);
@@ -114,8 +114,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        double p1 = new Double(p1_s).doubleValue();
-        double p2 = new Double(p2_s).doubleValue();
+        double p1 = Double.parseDouble(p1_s);
+        double p2 = Double.parseDouble(p2_s);
 
         Button w = ((Button)findViewById(R.id.win_button));
         Button d = ((Button)findViewById(R.id.draw_button));
@@ -146,11 +146,11 @@ public class MainActivity extends AppCompatActivity {
         KFactor k = null;
         try {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            String KFactorPreference = prefs.getString("standard_k", getString(R.string.k_factor_chess_com));
-            k = new KFactorFactory(this).createKFactor(KFactorPreference);
+            String KFactorPreference = prefs.getString("standard_k", KFactorFactory.STANDARD_K_FACTOR_APPROX_FIDE);
+            k = KFactorFactory.createKFactor(KFactorPreference);
         }
         catch (UnknownKFactorIdentifier unknownKFactorIdentifier) {
-            Log.d(LOG_TAG, "Something is seriously wrong. K factor IDs should be static and in string.xml");
+            Log.d(LOG_TAG, "Something is seriously wrong. K factor IDs should be static and always found");
             unknownKFactorIdentifier.printStackTrace();
         }
         assert k != null;
@@ -166,8 +166,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        double p1 = new Double(p1_s).doubleValue();
-        double p2 = new Double(p2_s).doubleValue();
+        double p1 = Double.parseDouble(p1_s);
+        double p2 = Double.parseDouble(p2_s);
 
         // notice that points  returns negative values for loses
         double updated_p1 = p1 + new Double(points(p1, p2,actual)).intValue();

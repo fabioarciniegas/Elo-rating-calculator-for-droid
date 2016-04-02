@@ -19,6 +19,7 @@ import android.widget.TableRow;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.preference.PreferenceManager;
+import android.graphics.Color;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -75,6 +76,8 @@ public class TournamentActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
         });
+
+
         // The last row (child of table) is the add button, therefore when a row is added is immediately before it
         insertionRow = tl.getChildCount()-1;
         insertRow(null);
@@ -106,9 +109,9 @@ public class TournamentActivity extends AppCompatActivity {
         try {
             int initialRating = EditTextToIntValue((EditText) findViewById(R.id.your_rating));
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            String KFactorPreference = prefs.getString("standard_k", getString(R.string.k_factor_chess_com));
+            String KFactorPreference = prefs.getString("standard_k",KFactorFactory.STANDARD_K_FACTOR_CHESS_COM);
 
-            KFactor k = new KFactorFactory(this).createKFactor(KFactorPreference);
+            KFactor k = KFactorFactory.createKFactor(KFactorPreference);
             EloCalculator elo = new EloCalculator(k);
             finalRating = (int) elo.tournament(
                     initialRating, elos.toArray(new Integer[elos.size()]), results.toArray(new Double[results.size()]));
@@ -177,6 +180,7 @@ public class TournamentActivity extends AppCompatActivity {
                 insertionRow--;
             }
         }
+        recalculateFinalElo();
     }
 
     public void insertRow(View view)
@@ -249,9 +253,15 @@ public class TournamentActivity extends AppCompatActivity {
         tr.addView(win);
 
         ImageButton b = new ImageButton(this);
-        b.setImageResource(android.R.drawable.ic_input_delete);
+        b.setImageResource(android.R.drawable.ic_delete);
         b.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         b.setBackgroundColor(android.R.color.transparent);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteRow(v);
+            }
+        });
         tr.addView(b);
         opponent_score.requestFocus();
     }

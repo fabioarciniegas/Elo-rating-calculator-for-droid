@@ -6,7 +6,7 @@
         android:title="@string/title_activity_tournament"
         app:showAsAction="always"/>
     <item android:id="@+id/settings"
-        android:icon="@drawable/ic_info_black_24dp"
+        android:icon="@drawable/ic_settings"
         app:showAsAction="always"
         android:title="@string/title_activity_settings" />
 

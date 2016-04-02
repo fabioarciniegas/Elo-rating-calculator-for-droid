@@ -17,13 +17,20 @@
     <string name="pref_description_K_value">the K value in the ELO equation determines how much a single match can affect the player\'s score.</string>
 
     <string name="pref_use_custom_K_value">Type of K factor</string>
-    <string name="pref_description_use_custom_K_value"></string>
+    <string name="pref_description_use_custom_K_value"> </string>
     <string name="pref_switch_use_custom_K_value_off">Custom</string>
     <string name="pref_switch_use_custom_K_value_on">Standard</string>
 
 
+<!-- The following must correspond to the values accepted by the KFactorFactory constructor.
+     They do not change given localization. The titles associated with them (see below) do -->
 
-
+    <!-- Begin KFactorFactory IDS-->
+    <string name="k_factor_chess_com">chess.com</string>
+    <string name="k_factor_icc">icc</string>
+    <string name="k_factor_approx_fide">approx_fide</string>
+    <string name="k_factor_approx_uscf">approx_uscf</string>
+    <!-- END KFactorFactory IDS-->
 
     <string name="pref_standard_k_title">Standard K</string>
     <string-array name="pref_standard_k_titles">
@@ -41,10 +48,6 @@
 
     <string name="pref_custom_k_value">Custom K</string>
 
-    <string name="k_factor_chess_com">chess.com</string>
-    <string name="k_factor_icc">icc</string>
-    <string name="k_factor_approx_fide">approximate fide</string>
-    <string name="k_factor_approx_uscf">approximate uscf</string>
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
