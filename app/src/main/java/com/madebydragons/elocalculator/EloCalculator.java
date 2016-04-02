@@ -2,7 +2,6 @@ package com.madebydragons.elocalculator;
 
 
 public class EloCalculator {
-    // TODO: make single player also work through this model
 
     private KFactor mK;
 

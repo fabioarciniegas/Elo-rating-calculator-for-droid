@@ -19,7 +19,6 @@ import android.widget.TableRow;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.preference.PreferenceManager;
-import android.graphics.Color;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -46,7 +45,6 @@ public class TournamentActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.tournament:
-                //TODO: start same activity if previously selected, not new one
                 intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 return true;
@@ -113,9 +111,16 @@ public class TournamentActivity extends AppCompatActivity {
         try {
             int initialRating = EditTextToIntValue((EditText) findViewById(R.id.your_rating));
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            String KFactorPreference = prefs.getString("standard_k",KFactorFactory.STANDARD_K_FACTOR_CHESS_COM);
+            boolean use_standard_k = prefs.getBoolean("use_standard_k", true);
+            String KFactorPreference;
+            KFactor k;
+            if(use_standard_k)
+                KFactorPreference = prefs.getString("standard_k",KFactorFactory.STANDARD_K_FACTOR_CHESS_COM);
+                k = KFactorFactory.createKFactor(KFactorPreference);
+            else
+               k =  KFactorFactory.createKFactor(Double.parseDouble(prefs.getString("custom_k","16.0")));
 
-            KFactor k = KFactorFactory.createKFactor(KFactorPreference);
+
             EloCalculator elo = new EloCalculator(k);
             finalRating = (int) elo.tournament(
                     initialRating, elos.toArray(new Integer[elos.size()]), results.toArray(new Double[results.size()]));
@@ -126,9 +131,9 @@ public class TournamentActivity extends AppCompatActivity {
         } catch (InvalidTournamentData invalidTournamentData) {
             invalidTournamentData.printStackTrace();
         }
-        catch (UnknownKFactorIdentifier unknownKFactorIdentifier) {
+        catch (UnknownKFactorIdentifierException unknownKFactorIdentifierException) {
             Log.d(LOG_TAG,"Something is seriously wrong. K factor IDs should be static and in string.xml");
-            unknownKFactorIdentifier.printStackTrace();
+            unknownKFactorIdentifierException.printStackTrace();
         }
         if(EditTextToIntValue((EditText)findViewById(R.id.your_rating))>0)
             ((EditText) findViewById(R.id.your_rating_after)).setText(new Integer(finalRating).toString());
@@ -244,10 +249,7 @@ public class TournamentActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
 
         });
-        //android:layout_height="wrap_content"
-            //TODO?  android:layout_gravity="bottom"
-      //  android:layout_marginLeft="0dp"
-      //  android:layout_marginRight="0dp"
+
 
         tr.addView(sb);
 

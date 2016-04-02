@@ -1,5 +1,4 @@
 package com.madebydragons.elocalculator;
-import android.content.Context;
 import java.util.HashMap;
 
 /**
@@ -19,7 +18,11 @@ public class KFactorFactory {
 //        mContext = c;
 //    }
 
-   public static KFactor createKFactor(String id) throws UnknownKFactorIdentifier{
+    public static KFactor createKFactor(double value) throws InvalidStaticKFactorValue {
+
+    }
+
+   public static KFactor createKFactor(String id) throws UnknownKFactorIdentifierException {
 
        if(id.equals(STANDARD_K_FACTOR_CHESS_COM))
 /// /        if(id.equals(mContext.getString(R.string.k_factor_chess_com)))
@@ -82,6 +85,6 @@ public class KFactorFactory {
                    return uscf.get(2700);
                }
            };
-       else throw new UnknownKFactorIdentifier(id);
+       else throw new UnknownKFactorIdentifierException(id);
    }
 }

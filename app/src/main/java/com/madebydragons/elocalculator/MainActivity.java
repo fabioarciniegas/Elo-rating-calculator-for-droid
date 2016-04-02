@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.view.View;
 import android.text.TextWatcher;
 import android.text.Editable;
-import android.widget.Button;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.content.Intent;
@@ -153,9 +152,9 @@ public class MainActivity extends AppCompatActivity {
             String KFactorPreference = prefs.getString("standard_k", KFactorFactory.STANDARD_K_FACTOR_APPROX_FIDE);
             k = KFactorFactory.createKFactor(KFactorPreference);
         }
-        catch (UnknownKFactorIdentifier unknownKFactorIdentifier) {
+        catch (UnknownKFactorIdentifierException unknownKFactorIdentifierException) {
             Log.d(LOG_TAG, "Something is seriously wrong. K factor IDs should be static and always found");
-            unknownKFactorIdentifier.printStackTrace();
+            unknownKFactorIdentifierException.printStackTrace();
         }
         assert k != null;
         return Math.round(k.K((int)p1)*(actual - expected_p1));
