@@ -114,11 +114,19 @@ public class TournamentActivity extends AppCompatActivity {
             boolean use_standard_k = prefs.getBoolean("use_standard_k", true);
             String KFactorPreference;
             KFactor k;
-            if(use_standard_k)
+            if(use_standard_k){
                 KFactorPreference = prefs.getString("standard_k",KFactorFactory.STANDARD_K_FACTOR_CHESS_COM);
                 k = KFactorFactory.createKFactor(KFactorPreference);
-            else
-               k =  KFactorFactory.createKFactor(Double.parseDouble(prefs.getString("custom_k","16.0")));
+            }
+            else {
+                try {
+                    k = KFactorFactory.createKFactor(Double.parseDouble(prefs.getString("custom_k", "16.0")));
+                } catch (NumberFormatException e) {
+                    // Todo: maybe tell user not to try to break app by changing preference values to unparsable numbers
+                    // despite the very reasonable input verifications.
+                    k = KFactorFactory.createKFactor(16.0);
+                }
+            }
 
 
             EloCalculator elo = new EloCalculator(k);
@@ -134,6 +142,10 @@ public class TournamentActivity extends AppCompatActivity {
         catch (UnknownKFactorIdentifierException unknownKFactorIdentifierException) {
             Log.d(LOG_TAG,"Something is seriously wrong. K factor IDs should be static and in string.xml");
             unknownKFactorIdentifierException.printStackTrace();
+        }
+        catch (InvalidStaticKFactorValueException invalidStaticKFactorValue) {
+            Log.d(LOG_TAG,"An invalid value for custom K factor was not caught by validation.");
+            invalidStaticKFactorValue.printStackTrace();
         }
         if(EditTextToIntValue((EditText)findViewById(R.id.your_rating))>0)
             ((EditText) findViewById(R.id.your_rating_after)).setText(new Integer(finalRating).toString());

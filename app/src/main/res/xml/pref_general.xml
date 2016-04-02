@@ -29,8 +29,8 @@
         android:title="@string/pref_custom_k_value"
         android:summary="..."
         android:digits="0123456789."
-        android:defaultValue="10.01"
-        android:maxLength="5"
+        android:defaultValue="10"
+        android:maxLength="4"
         />
 
 

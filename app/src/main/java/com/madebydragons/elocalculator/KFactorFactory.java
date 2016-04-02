@@ -18,7 +18,17 @@ public class KFactorFactory {
 //        mContext = c;
 //    }
 
-    public static KFactor createKFactor(double value) throws InvalidStaticKFactorValue {
+    public static KFactor createKFactor(final double value) throws InvalidStaticKFactorValueException {
+        if(value<0 || value>9999)
+            throw new InvalidStaticKFactorValueException("Negative or too large a value:"+value);
+
+        return new KFactor(){
+            @Override
+            public double K(int elo){
+                return value;
+            }
+        };
+
 
     }
 
@@ -36,7 +46,6 @@ public class KFactorFactory {
            return new KFactor(){
                @Override
                public double K(int elo){
-                   //TODO: obviously wrong, just for kicks
                    return 32.0;
                }
            };
