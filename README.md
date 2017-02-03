@@ -1,10 +1,3 @@
+A Droid App to calculate your Elo rating after a tournament (or single game).
 
-TODO: custom elo functionality for main screen
-TODO: settings icon
-TODO: help icon/settings in one drop
-TODO: help icon on settings as well
-TODO: better help (For k value)
-
-TODO: option to treat tournament as sequence of singles
-
-TODO: provide non-downloadable icons
+Slightly different (better?) than other similar tools in that (a) it uses different K factors for different scenarios (e.g. uscf u1800 different from uscf u1200)  and (b) allows the calculation over a matches, not just a single game.
